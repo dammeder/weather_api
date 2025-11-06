@@ -51,36 +51,3 @@ print(f"Sunrise: {sunrise_time}")
 print(f"Sunset: {sunset_time}")
 
 
-
-# weather_data = {
-#     "coord": {"lon": -88.4281, "lat": 42.1681},
-#     "weather": [
-#         {"id": 803, "main": "Clouds", "description": "broken clouds", "icon": "04n"}
-#     ],
-#     "base": "stations",
-#     "main": {
-#         "temp": 277.22,
-#         "feels_like": 274.4,
-#         "temp_min": 275.43,
-#         "temp_max": 279.09,
-#         "pressure": 1024,
-#         "humidity": 62,
-#         "sea_level": 1024,
-#         "grnd_level": 991
-#     },
-#     "visibility": 10000,
-#     "wind": {"speed": 3.19, "deg": 290, "gust": 6.99},
-#     "clouds": {"all": 61},
-#     "dt": 1762403798,
-#     "sys": {
-#         "type": 2,
-#         "id": 65513,
-#         "country": "US",
-#         "sunrise": 1762345915,
-#         "sunset": 1762382562
-#     },
-#     "timezone": -21600,
-#     "id": 4896691,
-#     "name": "Huntley",
-#     "cod": 200
-# }
