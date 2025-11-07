@@ -23,31 +23,81 @@ def kel_to_c_f(kelvin):
     return round(celcius, 1), round(fahrenheit, 1)
 
 
+def temp_to_emoji(temp):
+    if temp  <= 0: 
+        return "⛄"
+    elif 1 <= temp <= 10:
+        return "❄️"
+    elif 11 <= temp <= 15:
+        return "🥶"
+    elif 16 <= temp <= 20:
+        return "🌥️"
+    elif 21 <= temp <= 25:
+        return "🌤️"
+    elif 26 <= temp <= 30:
+        return "☀️"
+    elif temp > 30:
+        return "🔥"
+
+
+def desc_to_emoji(desc):
+    if "clouds" in desc:
+        return "☁️"
+    elif "thunderstorm" in desc:
+        return "⛈️⚡"
+    elif "drizzle" in desc:
+        return "🌦️"
+    elif "rain" in desc:
+        return "🌧️"
+    elif "snow" in desc:
+        return "❄️"
+    elif "clear" in desc:
+        return "☀️"
+    else:
+        return "🌫️"
+    
+
+
+
 response = requests.get(URL, params=params).json()
 
-# print(response)
 
 city = response['name']
 temp_kelvin = response['main']['temp']
 
 temp_celsius, temp_fahrenheit = kel_to_c_f(temp_kelvin)
 
+
 feels_like_kelvin = response['main']['feels_like']
 
 feels_like_celsius, feels_like_fahrenheit = kel_to_c_f(feels_like_kelvin)
 
-description = response['weather'][0]["description"].title()
+temp_emoji = temp_to_emoji(temp_celsius)
+
+
+
+description = response['weather'][0]["description"]
+desc_emoji = desc_to_emoji(description)
+
 sunrise_time = (dt.datetime.fromtimestamp(response["sys"]["sunrise"], dt.timezone.utc) + dt.timedelta(seconds=response['timezone'])).strftime("%I:%M %p")
 sunset_time = (dt.datetime.fromtimestamp(response["sys"]["sunset"], dt.timezone.utc) + dt.timedelta(seconds=response['timezone'])).strftime("%I:%M %p")
 
 time = (dt.datetime.fromtimestamp(response["dt"], dt.timezone.utc) + dt.timedelta(seconds=response['timezone'])).strftime("%I:%M %p")
 
 
-print(f"\n\n\nTodays weather in {city} as of {time}: ")
-print(f"Tempature: {temp_celsius}C° / {temp_fahrenheit}F°")
-print(f"Feels Like: {feels_like_celsius}C° / {feels_like_fahrenheit}F°")
-print(f"Weather State: {description}")
+
+
+print(f"\n\n\nTodays weather in {city} as of {time}:")
+print(f"Tempature: {temp_celsius}C° / {temp_fahrenheit}F° {temp_emoji}")
+print(f"Feels Like: {feels_like_celsius}C° / {feels_like_fahrenheit}F° {temp_emoji}")
+print(f"Weather State: {description.title()} {desc_emoji}")
 print(f"Sunrise: {sunrise_time}")
 print(f"Sunset: {sunset_time}")
 
 
+# 🌤️ Todays weather in Huntley as of 08:25 PM:
+# 🌡️ Tempature: 12.1C° / 53.7F°
+# Feels Like: 10.4C° / 50.8F°
+# Weather State: Overcast Clouds
+# Sunrise: 06:33 AM
+# Sunset: 04:41 P
