@@ -1,10 +1,12 @@
 import datetime as dt 
 import requests
+import json 
 
 
 with open('api_key', 'r') as f:
     API_KEY = f.read().strip()
-CITY = "Huntley"
+
+CITY = input("What citys weather would you like to check: ")
 
 URL = "https://api.openweathermap.org/data/2.5/weather"
 
@@ -20,7 +22,7 @@ def kel_to_c_f(kelvin):
     celcius = kelvin - 273.15
     fahrenheit = celcius * (9/5) + 32
 
-    return round(celcius, 1), round(fahrenheit, 1)
+    return round(celcius, 2), round(fahrenheit, 2)
 
 
 def temp_to_emoji(temp):
@@ -56,25 +58,18 @@ def desc_to_emoji(desc):
     else:
         return "🌫️"
     
-
-
-
+# try , execpt --- if i dont get a response 
 response = requests.get(URL, params=params).json()
-
 
 city = response['name']
 temp_kelvin = response['main']['temp']
 
 temp_celsius, temp_fahrenheit = kel_to_c_f(temp_kelvin)
 
-
 feels_like_kelvin = response['main']['feels_like']
-
 feels_like_celsius, feels_like_fahrenheit = kel_to_c_f(feels_like_kelvin)
 
 temp_emoji = temp_to_emoji(temp_celsius)
-
-
 
 description = response['weather'][0]["description"]
 desc_emoji = desc_to_emoji(description)
@@ -84,6 +79,7 @@ sunset_time = (dt.datetime.fromtimestamp(response["sys"]["sunset"], dt.timezone.
 
 time = (dt.datetime.fromtimestamp(response["dt"], dt.timezone.utc) + dt.timedelta(seconds=response['timezone'])).strftime("%I:%M %p")
 
+stamp_date = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
 
 
 
@@ -93,6 +89,22 @@ print(f"Feels Like: {feels_like_celsius}C° / {feels_like_fahrenheit}F° {temp_e
 print(f"Weather State: {description.title()} {desc_emoji}")
 print(f"Sunrise: {sunrise_time}")
 print(f"Sunset: {sunset_time}")
+
+
+new_entry = {
+    "timestamp": stamp_date,
+    "temp_c": temp_celsius,
+    "temp_f": temp_fahrenheit,
+    "city": city
+}
+
+with open("weather_log.json", "r" ) as log:
+    old_entry = json.load(log)
+
+with open("weather_log.json", "w") as log: 
+    json.dump(new_entry, log, indent=2)
+
+
 
 
 # 🌤️ Todays weather in Huntley as of 08:25 PM:
